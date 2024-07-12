@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 import { HiCurrencyRupee, IoBasket } from "../assets/icons";
 import { motion } from "framer-motion";
 import { buttonClick } from "../Animations";
-import { addNewProductToCart, getAllCartItems, getAllOffers } from "../api";
+import { addNewProductToCart, getAllCartItems, getAllOffers, getAllProducts } from "../api";
 import { useDispatch, useSelector } from "react-redux";
 import { alertNULL, alertSuccess } from "../Context/actions/alertActions";
 import { setCartItems } from "../Context/actions/cartActions";
 import { useNavigate } from "react-router-dom";
 import { setAllOffers } from "../Context/actions/offerActions";
+import { setAllProducts } from "../Context/actions/productActions";
 
 const SliderCard = ({ data, index }) => {
   const user = useSelector((state) => state.user);
