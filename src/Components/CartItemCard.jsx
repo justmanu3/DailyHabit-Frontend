@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
-import {  HiCurrencyRupee } from "../assets/icons/index";
+import { HiCurrencyRupee } from "../assets/icons/index";
 import { fadeInOut, buttonClick } from "../Animations";
-import { editStockCount, increaseItemQuantity } from "../api";
+import { editStockCount, getAllProducts, increaseItemQuantity } from "../api";
 import { getAllCartItems } from "../api";
 import { setCartItems } from "../Context/actions/cartActions";
 import { alertNULL, alertSuccess } from "../Context/actions/alertActions";
+import { setAllProducts } from "../Context/actions/productActions";
 
 const CartItemCard = ({ index, data }) => {
   const cart = useSelector((state) => state.cart);

@@ -10,19 +10,18 @@ import { app } from "../Config/firebase.config";
 const DbHeader = () => {
   //getting user from the redux
   const user = useSelector((state) => state.user);
-  const firebaseAuth = getAuth(app);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const firebaseAuth = getAuth(app);
 
-  const signOut = () => {
-    firebaseAuth
-      .signOut()
-      .then(() => {
-        dispatch(setUserNull());
-        navigate("/login", { replace: true });
-      })
-      .catch((err) => console.log(err));
-  };
+
+  // const signOut = () => {
+  //   firebaseAuth
+  //     .signOut()
+  //     .then(() => {
+  //       dispatch(setUserNull());
+  //       navigate("/login", { replace: true });
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
   return (
     <div className="w-full flex items-center justify-between gap-3">
@@ -51,12 +50,12 @@ const DbHeader = () => {
           <BsFillBellFill className="text-gray-500 text-xl" />
         </motion.div>
 
-        <motion.div
+        {/* <motion.div
           {...buttonClick}
           className="w-10 h-10 rounded-md cursor-pointer bg-primary backdrop-blur-md shadow-md flex items-center justify-center"
         >
           <MdLogout />
-        </motion.div>
+        </motion.div> */}
       </div>
     </div>
   );
