@@ -87,7 +87,7 @@ const ProductsFilter = () => {
         {dbcategory &&
           dbcategory.map((data, i) => (
             <FilterCard
-              key={data.id}
+              key={data.id || i}
               data={data}
               category={category}
               setCategory={setCategory}
@@ -105,7 +105,7 @@ const ProductsFilter = () => {
             )
             .map((data, i) => (
               <SliderCard
-                key={data.id}
+                key={data.id || i}
                 data={{ ...data, imageURL: data.imageURL[0] }}
                 index={i}
               />
@@ -118,7 +118,7 @@ const ProductsFilter = () => {
 export const FilterCard = ({ data, index, category, setCategory }) => {
   return (
     <motion.div
-      key={index}
+      key={data.id || index} // Ensure key is unique
       {...fadeInOut(index)}
       onClick={() => setCategory(data.title)}
       className={`group w-28 min-w-[128px] cursor-pointer rounded-md py-6 ${

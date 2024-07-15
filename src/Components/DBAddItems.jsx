@@ -17,18 +17,18 @@ import {
   alertSuccess,
 } from "../Context/actions/alertActions";
 import { buttonClick } from "../Animations/index";
-import { statuses } from "../assets/utils/styles";
 import { addNewProduct, getAllProducts } from "../api";
 import { setAllProducts } from "../Context/actions/productActions";
 import { collection, getDocs } from "firebase/firestore";
+
 const DBAddItems = () => {
   const [productName, setProductName] = useState("");
-  const [category, setCategory] = useState([]);
+  const [category, setCategory] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productCount, setProductCount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [imageDownloadURLs, setImageDownloadURLs] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -123,13 +123,7 @@ const DBAddItems = () => {
 
   useEffect(() => {
     fetchCategories();
-  }, [selectedCategory]);
-
-  ////
-
-  useEffect(() => {
-    console.log("Categories fetched:", category);
-  }, [category]);
+  }, []);
 
   // useEffect(() => {
   //   console.log("category kitti", category);
@@ -233,11 +227,11 @@ const DBAddItems = () => {
         <div className="w-full flex items-center justify-around">
           <select
             className="px-4 py-2 rounded-md text-lg text-lighttextGray font-normal cursor-pointer shadow-md border border-gray-200 backdrop-blur-md appearance-none bg-white"
-            defaultValue={category}
+            value={category}
             onChange={handleChange}
             style={{ minWidth: "910px" }}
           >
-            <option value="other">Select a category</option>
+            <option value="">Select a category</option>
 
             {selectedCategory &&
               selectedCategory.map((pdt, i) => (

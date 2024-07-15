@@ -13,30 +13,6 @@ const DBSalesReport = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  // const downloadPDF = () => {
-  //   const input = pdfRef.current;
-  //   html2canvas(input).then((canvas) => {
-  //     const imgData = canvas.toDataURL("image/png");
-  //     const pdf = new jsPDF("p", "mm", "a4", true);
-  //     const pdfWidth = pdf.internal.pageSize.getWidth();
-  //     const pdfHeight = pdf.internal.pageSize.getHeight();
-  //     const imgWidth = canvas.width;
-  //     const imgHeight = canvas.height;
-  //     const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-  //     const imgX = (pdfWidth - imgWidth * ratio) / 2;
-  //     const imgY = 30;
-  //     pdf.addImage(
-  //       imgData,
-  //       "PNG",
-  //       imgX,
-  //       imgY,
-  //       imgWidth * ratio,
-  //       imgHeight * ratio
-  //     );
-  //     pdf.save("SalesReport.pdf");
-  //   });
-  // };
-
   const downloadExcel = () => {
     console.log(filteredOrders);
     var wb = utils.book_new(),
@@ -137,7 +113,7 @@ const DBSalesReport = () => {
         <tbody>
           {filteredOrders?.length > 0 ? (
             filteredOrders.map((order, index) => (
-              <tr key={order.id} className="hover:bg-gray-100">
+              <tr key={order.orderId || index} className="hover:bg-gray-100">
                 <td className="border px-4 py-2">{index + 1}</td>
                 <td className="border px-4 py-2">{order.orderId}</td>
                 <td className="border px-4 py-2">{order.customer.name}</td>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setAllUserDetails } from "../Context/actions/allUserActions";
 import { blockAndUnblockUser, getAllUsers } from "../api";
-import DataTable from "./DataTable";
 import Avatar from "../assets/icons/Avatar.png";
 import { buttonClick } from "../Animations";
 import { motion } from "framer-motion";
@@ -12,7 +11,6 @@ const DBUsers = () => {
   const allUsers = useSelector((state) => state.allUser);
   const dispatch = useDispatch();
   const [check, setCheck] = useState(null);
-  // const [checkTwo, setCheckTwo] = useState(null);
 
   useEffect(() => {
     if (!allUsers) {
@@ -20,16 +18,16 @@ const DBUsers = () => {
         dispatch(setAllUserDetails(data));
       });
     }
-  }, []);
+  }, [allUsers, dispatch]);
 
   useEffect(() => {
-    // if (check || checkTwo) {
-    console.log("Check working ann");
-    getAllUsers().then((data) => {
-      dispatch(setAllUserDetails(data));
-    });
-    // }
-  }, [check]);
+    if (check !== null) {
+      console.log("Check working ann");
+      getAllUsers().then((data) => {
+        dispatch(setAllUserDetails(data));
+      });
+    }
+  }, [check, dispatch]);
 
   //block and unblock users
   const blockAndUnblock = (uid, checkDisabled) => {
@@ -38,8 +36,6 @@ const DBUsers = () => {
       const disabledvalue = true;
       try {
         blockAndUnblockUser(uid, disabledvalue).then(() => {
-          // setCheck(true);
-          // setCheckTwo(false);
           console.log("Values...kititiiii");
         });
         dispatch(alertSuccess("User Blocked"));
@@ -51,8 +47,7 @@ const DBUsers = () => {
       const disabledvalue = false;
       try {
         blockAndUnblockUser(uid, disabledvalue).then(() => {
-          // setCheckTwo(true);
-          // setCheck(false);
+          console.log("Values...kititiiii");
         });
         dispatch(alertSuccess("User Unblocked"));
         setTimeout(() => {
@@ -64,90 +59,47 @@ const DBUsers = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (!allUsers) {
-
-  //       const data = await getAllUsers();
-  //       dispatch(setAllUserDetails(data));
-
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [allUsers, dispatch]);
-
   return (
     <motion.div className="flex items-center justify-center gap-4 pt-6 w-full">
-      <DataTable
-        columns={[
-          {
-            title: "Image",
-            field: "photoURL",
-            render: (rowData) => (
-              <img
-                src={rowData.photoURL ? rowData.photoURL : Avatar}
-                className="w-32 h-16 object-contain rounded-full"
-              />
-            ),
-          },
-          {
-            title: "Name",
-            field: "displayName",
-          },
-          {
-            title: "Email",
-            field: "email",
-          },
-
-          {
-            title: "Action",
-            field: "disabled",
-            render: (rowData) => (
-              <p
-                className={`px-2 py-1 text-center text-primary rounded-2xl cursor-pointer ${
-                  rowData.disabled === false ? "bg-emerald-500" : "bg-red-500"
-                }`}
-                {...buttonClick}
-                onClick={() => blockAndUnblock(rowData.uid, rowData.disabled)}
-              >
-                {rowData.disabled === false ? "Unblocked" : "Blocked"}
-              </p>
-            ),
-          },
-        ]}
-        data={allUsers}
-        title="List of Users"
-        actions={
-          [
-            // {
-            //   icon: "edit",
-            //   tooltip: "Block User?",
-            //   onClick: (event, rowData) => {
-            //     blockAndUnblock(rowData.uid, rowData.disabled);
-            //     // alert("Want to Edit  " + rowData.displayName);
-            //   },
-            // },
-            // {
-            //   icon: "delete",
-            //   tooltip: "Delete User",
-            //   onClick: (event, rowData) => {
-            //     if (window.confirm("Confirm Deletion?")) {
-            //       deleteAProduct(rowData.productId).then((res) => {
-            //         dispatch(alertSuccess("Product Deleted"));
-            //         setInterval(() => {
-            //           dispatch(alertNULL());
-            //         }, 3000);
-            //         getAllProducts().then((data) => {
-            //           dispatch(setAllProducts(data));
-            //         });
-            //       });
-            //     }
-            //   },
-            // },
-          ]
-        }
-      />
+      <table className="min-w-full bg-white">
+        <thead>
+          <tr>
+            <th className="py-2 px-4 border-b border-gray-200">Image</th>
+            <th className="py-2 px-4 border-b border-gray-200">Name</th>
+            <th className="py-2 px-4 border-b border-gray-200">Email</th>
+            <th className="py-2 px-4 border-b border-gray-200">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {allUsers?.map((user) => (
+            <tr key={user.uid}>
+              <td className="py-2 px-4 border-b border-gray-200">
+                <img
+                  src={user.photoURL ? user.photoURL : Avatar}
+                  className="w-32 h-16 object-contain rounded-full"
+                />
+              </td>
+              <td className="py-2 px-4 border-b border-gray-200">
+                {user.displayName}
+              </td>
+              <td className="py-2 px-4 border-b border-gray-200">
+                {user.email}
+              </td>
+              <td className="py-2 px-4 border-b border-gray-200">
+                <motion.p
+                  className={`px-2 py-1 text-center text-primary rounded-2xl cursor-pointer ${
+                    user.disabled === false ? "bg-emerald-500" : "bg-red-500"
+                  }`}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => blockAndUnblock(user.uid, user.disabled)}
+                >
+                  {user.disabled === false ? "Unblocked" : "Blocked"}
+                </motion.p>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </motion.div>
   );
 };
