@@ -40,6 +40,22 @@ const Login = () => {
 
   //google login
 
+  // const loginWithGoogle = async () => {
+  //   await signInWithPopup(firebaseAuth, provider).then((userCred) => {
+  //     firebaseAuth.onAuthStateChanged((cred) => {
+  //       if (cred) {
+  //         cred.getIdToken().then((token) => {
+  //           // validate token
+  //           validateUserJWTToken(token).then((data) => {
+  //             dispatch(setUserDetails(data));
+  //           });
+  //           navigate("/home", { replace: true });
+  //         });
+  //       }
+  //     });
+  //   });
+  // };
+
   const loginWithGoogle = async () => {
     await signInWithPopup(firebaseAuth, provider).then((userCred) => {
       firebaseAuth.onAuthStateChanged((cred) => {
@@ -97,7 +113,7 @@ const Login = () => {
       <div className="flex flex-col items-center bg-cardOverlay w-[80%] md:w-508 h-full z-10 backdrop-blur-md p-4 px-4 py-12">
         <div className="flex items-center justify-items-start gap-4 w-full">
           <img src={logo} className="w-10" alt="" />
-          <p className=" text-3xl">DAILY HOBBY</p>
+          <p className=" text-3xl">DAILY HABIT</p>
         </div>
 
         <br />
