@@ -31,6 +31,7 @@ const App = () => {
 
   useEffect(() => {
     setIsLoading(true);
+    console.log(process.env)
     firebaseAuth.onAuthStateChanged((cred) => {
       if (cred) {
         cred.getIdToken().then((token) => {
