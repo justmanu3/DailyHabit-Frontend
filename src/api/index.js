@@ -5,6 +5,7 @@ export const baseURL = process.env.REACT_APP_BASE_URL;
 
 export const validateUserJWTToken = async (token) => {
   try {
+    console.log(token);
     const res = await axios.get(`${baseURL}/api/users/jwtVerification`, {
       headers: { Authorization: "Bearer " + token },
     });

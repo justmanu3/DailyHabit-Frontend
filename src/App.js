@@ -31,7 +31,6 @@ const App = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    console.log(process.env)
     firebaseAuth.onAuthStateChanged((cred) => {
       if (cred) {
         cred.getIdToken().then((token) => {
@@ -67,7 +66,7 @@ const App = () => {
         <Route path="/" element={<Welcome />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="*" element={<NotFound/>}/>
+        <Route path="*" element={<NotFound />} />
 
         <Route element={<PrivateRoutes />}>
           <Route path="/home" element={<Home />} />
