@@ -77,23 +77,37 @@ const Login = () => {
 
   const signInwithEmailPassword = async () => {
     if (email !== "" && password !== "") {
-      await signInWithEmailAndPassword(firebaseAuth, email, password).then(
-        (userCred) => {
-          firebaseAuth.onAuthStateChanged((cred) => {
-            if (cred) {
-              cred.getIdToken().then((token) => {
-                // validate token
-                validateUserJWTToken(token).then((data) => {
-                  dispatch(setUserDetails(data));
+      try {
+        await signInWithEmailAndPassword(firebaseAuth, email, password);
+        firebaseAuth.onAuthStateChanged((cred) => {
+          if (cred) {
+            cred.getIdToken().then((token) => {
+              // validate token
+              validateUserJWTToken(token)
+                .then((data) => {
+                  if (data) {
+                    dispatch(setUserDetails(data));
+                    navigate("/home", { replace: true });
+                  } else {
+                    dispatch(alertWarning("Invalid token"));
+                  }
+                })
+                .catch((error) => {
+                  console.error("Error during token validation:", error);
+                  dispatch(alertWarning("Token validation failed"));
                 });
-                navigate("/home", { replace: true });
-              });
-            }
-          });
-        }
-      );
+            });
+          }
+        });
+      } catch (error) {
+        console.error("Error during sign in:", error);
+        dispatch(alertWarning("Incorrect email or password"));
+        setTimeout(() => {
+          dispatch(alertNULL());
+        }, 3000);
+      }
     } else {
-      dispatch(alertWarning("Incorrect email or password"));
+      dispatch(alertWarning("Email and password must not be empty"));
       setTimeout(() => {
         dispatch(alertNULL());
       }, 3000);
