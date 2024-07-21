@@ -115,47 +115,47 @@ const Login = () => {
   };
 
   return (
-    <div className="w-screen h-screen relative overflow-hidden flex">
+    <div className="w-screen h-screen relative overflow-hidden flex items-center justify-center bg-gray-100">
       {/* Background image */}
-
       <img
         src={LoginBg}
-        className="w-full h-screen object-cover absolute top-0 left-0"
-        alt=""
+        className="w-full h-full object-cover absolute top-0 left-0 z-0"
+        alt="Background"
       />
 
       {/* Content */}
-      <div className="flex flex-col items-center bg-cardOverlay w-[80%] md:w-508 h-full z-10 backdrop-blur-md p-4 px-4 py-12">
-        <div className="flex items-center justify-items-start gap-4 w-full">
-          <img src={logo} className="w-10" alt="" />
-          <p className=" text-3xl">DAILY HABIT</p>
+      <div className="flex flex-col items-center bg-cardOverlay w-[90%] max-w-lg md:w-[80%] lg:w-[40%] h-auto md:h-auto z-10 backdrop-blur-md p-4 md:p-8 lg:p-12 rounded-lg">
+        <div className="flex items-center gap-4 w-full mb-6">
+          <img src={logo} className="w-8 md:w-10" alt="Logo" />
+          <p className="text-2xl md:text-3xl text-white">DAILY HABIT</p>
         </div>
 
-        <br />
-        <p className="text-3xl text-textColor font-semibold">Welcome</p>
-        <p>Sign In Here</p>
+        <p className="text-2xl md:text-3xl text-textColor font-semibold mb-4">
+          Welcome
+        </p>
+        <p className="text-base md:text-lg text-gray-700 mb-6">Sign In Here</p>
 
-        <div className="w-full flex flex-col items-center justify-center gap-6 px-4 md:px-12 py-4">
+        <div className="w-full flex flex-col items-center justify-center gap-4 md:gap-6">
           <LoginInput
-            placeHolder={"Email Here"}
+            placeHolder="Email Here"
             icon=""
             inputState={email}
             inputStateFunc={setEmail}
             type="email"
           />
           <LoginInput
-            placeHolder={"Password Here"}
+            placeHolder="Password Here"
             icon=""
             inputState={password}
             inputStateFunc={setPassword}
             type="password"
           />
 
-          <p>
-            Doesn't have an Account?
+          <p className="text-gray-700 text-sm md:text-base">
+            Don't have an account?
             <motion.button
               {...buttonClick}
-              className="text-red-400 underline cursor-pointer bg-transparent"
+              className="text-red-400 underline cursor-pointer bg-transparent ml-2"
               onClick={() => navigate("/signup")}
             >
               Create One
@@ -164,29 +164,26 @@ const Login = () => {
 
           <motion.button
             {...buttonClick}
-            className="w-full px-4 py-2 rounded-md bg-red-400 cursor-pointer text-xl capitalize hover:bg-red-500 duration-150"
+            className="w-full px-4 py-2 rounded-md bg-red-400 text-white text-lg md:text-xl capitalize hover:bg-red-500 duration-150"
             onClick={signInwithEmailPassword}
           >
             Sign In
           </motion.button>
         </div>
 
-        <div className="flex items-center justify-between gap-16">
-          <div className="w-24 h-[2px] rounded-md bg-white"></div>
-
-          <p className="text-white"></p>
-          <div className="w-24 h-[2px] rounded-md bg-white"></div>
+        <div className="flex items-center justify-between gap-4 w-full mt-8 mb-4">
+          <div className="w-16 md:w-24 h-[2px] rounded-md bg-white"></div>
+          <p className="text-white text-sm md:text-base">OR</p>
+          <div className="w-16 md:w-24 h-[2px] rounded-md bg-white"></div>
         </div>
-        <br />
+
         <motion.div
           {...buttonClick}
-          className=" flex items-center justify-center px-32 py-3 bg-slate-200 backdrop-blur-md cursor-pointer rounded-3xl gap-4 "
+          className="flex items-center justify-center w-full px-6 py-3 bg-white text-gray-700 rounded-lg cursor-pointer gap-4 shadow-md hover:bg-gray-200"
           onClick={loginWithGoogle}
         >
-          <img src={googleicon} className="w-5 h-5" alt="" />
-          <p className="capitalize text-base text-textColor">
-            Signin with Google
-          </p>
+          <img src={googleicon} className="w-5 h-5" alt="Google Icon" />
+          <p className="capitalize text-sm md:text-base">Sign in with Google</p>
         </motion.div>
       </div>
     </div>

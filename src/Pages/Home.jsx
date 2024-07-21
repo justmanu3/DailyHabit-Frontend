@@ -18,30 +18,37 @@ const Home = () => {
 
   useEffect(() => {
     if (!products) {
-      getAllProducts().then((data) => {
-        dispatch(setAllProducts(data));
-      });
+      getAllProducts()
+        .then((data) => {
+          dispatch(setAllProducts(data));
+        })
+        .catch((error) => {
+          console.error("Error fetching products:", error);
+        });
     }
-  }, []);
+  }, [dispatch, products]);
 
   useEffect(() => {
     if (!offers) {
-      getAllOffers().then((data) => {
-        dispatch(setAllOffers(data));
-      });
+      getAllOffers()
+        .then((data) => {
+          dispatch(setAllOffers(data));
+        })
+        .catch((error) => {
+          console.error("Error fetching offers:", error);
+        });
     }
   }, [dispatch, offers]);
 
   return (
-    <main className=" min-h-screen flex items-center justify-center flex-col ">
+    <main className="min-h-screen flex flex-col items-center justify-center">
       <Header />
-      <div className="w-full flex flex-col items-start justify-start pt-24  mt-0  pb-10">
+      <div className="w-full flex flex-col items-start justify-start pt-24 pb-10 sm:pt-16 sm:pb-8">
         <HomePage />
-        {/* <HomeSlider /> */}
+        <HomeSlider />
         <ProductsFilter />
         <Footer />
       </div>
-
       {isCart && <Cart />}
     </main>
   );

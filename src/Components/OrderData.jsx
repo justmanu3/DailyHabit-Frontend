@@ -12,7 +12,7 @@ import { setOrders } from "../Context/actions/ordersAction";
 import { useDispatch, useSelector } from "react-redux";
 import { alertInfo, alertNULL } from "../Context/actions/alertActions";
 import { setWallet } from "../Context/actions/walletActions";
-import Invoice from "./Invoice"; 
+import Invoice from "./Invoice";
 
 const OrderData = ({ index, data, admin }) => {
   const dispatch = useDispatch();
@@ -47,7 +47,7 @@ const OrderData = ({ index, data, admin }) => {
       })
       .then((data) => {
         dispatch(setOrders(data));
-        dispatch(alertInfo("Order status and wallet amount updated"));
+        dispatch(alertInfo("Order status updated"));
         setTimeout(() => {
           dispatch(alertNULL());
         }, 3000);

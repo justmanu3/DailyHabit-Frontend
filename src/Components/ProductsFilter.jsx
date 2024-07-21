@@ -32,7 +32,6 @@ const ProductsFilter = () => {
     fetchData();
   }, []);
 
-  // Reset search term and sort order when category changes
   useEffect(() => {
     setSearchTerm("");
     setSortOrder("");
@@ -55,9 +54,9 @@ const ProductsFilter = () => {
   };
 
   return (
-    <motion.div className="w-full flex items-start justify-start flex-col pt-8">
-      <div className="w-full flex items-center justify-between">
-        <div className="flex flex-col items-start justify-start gap-1 ml-5">
+    <motion.div className="w-full flex flex-col pt-8">
+      <div className="w-full flex flex-col md:flex-row items-start md:items-center justify-between px-5">
+        <div className="flex flex-col items-start gap-1 mb-4 md:mb-0">
           <p className="text-2xl text-textColor font-bold">Our Menu</p>
           <div className="w-40 h-1 rounded-md bg-red-400"></div>
         </div>
@@ -83,7 +82,7 @@ const ProductsFilter = () => {
         </div>
       </div>
 
-      <div className="w-full pt-6 flex items-center justify-center gap-20 py-8">
+      <div className="w-full flex flex-wrap justify-center gap-4 py-8 px-5">
         {dbcategory &&
           dbcategory.map((data, i) => (
             <FilterCard
@@ -96,20 +95,24 @@ const ProductsFilter = () => {
           ))}
       </div>
 
-      <div className="flex flex-wrap justify-center items-center gap-5 ml-10">
-        {products &&
-          sortedProducts(products)
-            .filter((data) => data.product_category === category)
-            .filter((data) =>
-              data.product_name.toLowerCase().includes(searchTerm.toLowerCase())
-            )
-            .map((data, i) => (
-              <SliderCard
-                key={data.id || i}
-                data={{ ...data, imageURL: data.imageURL[0] }}
-                index={i}
-              />
-            ))}
+      <div className="flex justify-center px-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 w-full max-w-screen-xl">
+          {products &&
+            sortedProducts(products)
+              .filter((data) => data.product_category === category)
+              .filter((data) =>
+                data.product_name
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase())
+              )
+              .map((data, i) => (
+                <SliderCard
+                  key={data.id || i}
+                  data={{ ...data, imageURL: data.imageURL[0] }}
+                  index={i}
+                />
+              ))}
+        </div>
       </div>
     </motion.div>
   );
@@ -118,12 +121,12 @@ const ProductsFilter = () => {
 export const FilterCard = ({ data, index, category, setCategory }) => {
   return (
     <motion.div
-      key={data.id || index} // Ensure key is unique
+      key={data.id || index}
       {...fadeInOut(index)}
       onClick={() => setCategory(data.title)}
-      className={`group w-28 min-w-[128px] cursor-pointer rounded-md py-6 ${
+      className={`group  border-red-500 border-2 w-full max-w-xs cursor-pointer rounded-md py-6 px-4 ${
         category === data.title ? "bg-red-500" : "bg-primary"
-      } hover:bg-red-500 shadow-md flex flex-col items-center justify-center gap-10`}
+      } hover:bg-red-500 shadow-md flex flex-col items-center justify-center gap-2`}
     >
       <div
         className={`w-10 h-10 rounded-full shadow-md flex items-center justify-center group-hover:bg-primary ${

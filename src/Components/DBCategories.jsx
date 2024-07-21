@@ -7,13 +7,21 @@ import {
   doc,
   getDocs,
 } from "firebase/firestore";
+import { useDispatch } from "react-redux";
+import {
+  alertNULL,
+  alertSuccess,
+  alertWarning,
+} from "../Context/actions/alertActions";
 
 const DBCategories = () => {
   const [showModal, setShowModal] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([]);
   const [title, setTitle] = useState("");
   const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  const dispatch = useDispatch();
 
   const categoryCollectionRef = collection(db, "categories");
 
@@ -30,21 +38,43 @@ const DBCategories = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if the category already exists
+    const categoryExists = categories.some(
+      (cat) => cat.title.toLowerCase() === title.toLowerCase()
+    );
+    if (categoryExists) {
+      dispatch(
+        alertWarning(
+          "Category already exists. Please input a different category name."
+        )
+      );
+      setTimeout(() => {
+        dispatch(alertNULL());
+      }, 3000);
+      return;
+    }
+
     setShowModal(false);
     setShowPopup(true);
 
-    const categories = {
+    const newCategory = {
       title,
     };
 
-    setCategory("");
-    await addCategory(categories);
-    console.log(categories);
+    await addCategory(newCategory);
+    dispatch(alertSuccess("New Category Added"));
+    setTimeout(() => {
+      dispatch(alertNULL());
+    }, 3000);
+
+    setTitle("");
+    forceUpdate();
   };
 
   const getcategory = useCallback(async () => {
     const data = await getAllCategory();
-    setCategory(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   }, []);
 
   React.useEffect(() => {
@@ -53,13 +83,17 @@ const DBCategories = () => {
 
   const deleteHandler = async (id) => {
     await deleteCategory(id);
+    dispatch(alertSuccess("Category Deleted"));
+    setTimeout(() => {
+      dispatch(alertNULL());
+    }, 3000);
     forceUpdate();
   };
 
   return (
     <>
       <br />
-      <div className="centered text-4xl">Category </div>
+      <div className="centered text-4xl">Category</div>
       <br />
       <div>
         <button
@@ -87,8 +121,8 @@ const DBCategories = () => {
           </tr>
         </thead>
         <tbody>
-          {category &&
-            category.map((doc, index) => (
+          {categories &&
+            categories.map((doc, index) => (
               <tr
                 key={index}
                 className="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0"
@@ -190,7 +224,7 @@ const DBCategories = () => {
                   <form className="max-w-[400px] w-full mx-auto bg-white p-8 px-8 rounded-3xl">
                     <div className="flex flex-col text-grey-500">
                       <label className="text-green-600 font-sans text-2xl">
-                        Succefully Added to Category
+                        Successfully Added to Category
                       </label>
                     </div>
                     <br />

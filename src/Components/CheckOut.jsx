@@ -342,9 +342,11 @@ function CheckoutPage() {
   };
 
   return (
-    <div className="flex items-center w-full min-h-screen px-10 gap-10 bg-opacity-15">
+    <div className="flex flex-col lg:flex-row w-full min-h-screen px-4 lg:px-10 gap-6 lg:gap-10 bg-gray-100">
       <Header />
-      <motion.div className="w-1/3 bg-gray-200 rounded-2xl p-4 drop-shadow-lg">
+
+      {/* Delivery Address Form */}
+      <motion.div className="w-full lg:w-1/3 bg-gray-200 rounded-2xl p-5 pt-20 drop-shadow-lg">
         <h2 className="text-xl font-bold mb-4">Delivery Address</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-2">
@@ -471,10 +473,9 @@ function CheckoutPage() {
       </motion.div>
 
       {/* Order Details and Payment */}
-
-      <motion.div className="w-2/3 border border-red-200 bg-primary rounded-md p-4 drop-shadow-lg">
+      <motion.div className="w-full pt-20 lg:w-2/3 border border-red-200 bg-white rounded-md p-5 drop-shadow-lg">
         <h2 className="font-bold text-lg mb-4">Order Details</h2>
-        <table className="w-full table-auto">
+        <table className="w-full table-auto mb-4">
           <thead>
             <tr>
               <th className="text-left px-2 py-1">Product</th>
@@ -486,34 +487,34 @@ function CheckoutPage() {
               <tr key={index}>
                 <td className="text-left px-2 py-1">{item.product_name}</td>
                 <td className="text-right px-2 py-1">
-                  {Number(item.product_price).toFixed(2)}*{item.quantity}
+                  {Number(item.product_price).toFixed(2)} * {item.quantity}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div className="flex flex-row justify-between mt-4">
+        <div className="flex flex-col md:flex-row justify-between mt-4">
           <p className="font-bold">Subtotal:</p>
           <p>₹ {subTotal}</p>
         </div>
-        <div className="flex flex-row justify-between mt-2">
+        <div className="flex flex-col md:flex-row justify-between mt-2">
           <p>Shipping: </p>
           <p>Free</p>
         </div>
-        <div className="flex flex-row justify-between mt-2">
-          <p className="text-red-500 font-bold">Coupon Offer : </p>
+        <div className="flex flex-col md:flex-row justify-between mt-2">
+          <p className="text-red-500 font-bold">Coupon Offer:</p>
           <p className="text-red-500 font-bold">₹</p>
         </div>
-        <div className="flex flex-row justify-between mt-2 text-lg font-bold">
+        <div className="flex flex-col md:flex-row justify-between mt-2 text-lg font-bold">
           <p>Total:</p>
           <p>₹ {total}</p>
         </div>
 
-        <h3 className="font-bold text-lg mt-4 mb-2">Coupons </h3>
+        <h3 className="font-bold text-lg mt-4 mb-2">Coupons</h3>
         {coupons?.length > 0 ? (
-          <div className=" flex  rounded-md p-4 mb-4">
+          <div className="flex flex-col md:flex-row items-start justify-between gap-4 mb-4">
             <select
-              className="w-2/4 px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-red-500"
+              className="w-full md:w-2/4 px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-red-500"
               value={selectedCoupon}
               onChange={handleCouponChange}
             >
@@ -527,11 +528,11 @@ function CheckoutPage() {
                 ))}
             </select>
 
-            <div className="w-2/5 flex items-center justify-center bg-blue-600 rounded-3xl ml-16">
+            <div className="flex items-center justify-center bg-blue-600 rounded-3xl mt-4 md:mt-0">
               {couponApplied ? (
                 <button
                   {...buttonClick}
-                  className="font-semibold text-white cursor-pointer"
+                  className="font-semibold text-white cursor-pointer px-4 py-2"
                   onClick={removeCoupon}
                 >
                   Remove Coupon
@@ -539,7 +540,7 @@ function CheckoutPage() {
               ) : (
                 <button
                   {...buttonClick}
-                  className="font-semibold text-white cursor-pointer"
+                  className="font-semibold text-white cursor-pointer px-4 py-2"
                   onClick={couponApply}
                 >
                   Apply Coupon
@@ -573,11 +574,11 @@ function CheckoutPage() {
           <p>No addresses available. Please add a new address.</p>
         )}
 
-        <div className=" flex flex-row items-start justify-evenly gap-4">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-4">
           {wallet && wallet.amount !== 0 && total < wallet.amount ? (
             <motion.button
               {...buttonClick}
-              className="mt-4 bg-orange-500 text-white py-2 px-20 rounded-md hover:bg-orange-600 border border-white"
+              className="bg-emerald-500 text-white py-2 px-6 rounded-md hover:bg-emerald-600 border border-white"
               onClick={payByWallet}
             >
               Pay by Wallet
@@ -587,7 +588,7 @@ function CheckoutPage() {
           {total && total > 1000 ? null : (
             <motion.button
               {...buttonClick}
-              className="mt-4 bg-emerald-500 text-white py-2 px-20 rounded-md hover:bg-emerald-600 border border-white"
+              className="bg-emerald-500 text-white py-2 px-6 rounded-md hover:bg-emerald-600 border border-white"
               onClick={checkout}
             >
               Cash On Delivery
@@ -596,7 +597,7 @@ function CheckoutPage() {
 
           <motion.button
             {...buttonClick}
-            className="mt-4 bg-white  py-2 px-20 rounded-md  text-emerald-700 font-bold border border-emerald-400"
+            className="bg-white text-emerald-700 font-bold py-2 px-6 rounded-md border border-emerald-400"
             onClick={confirmPaymentMethod}
           >
             Pay Online

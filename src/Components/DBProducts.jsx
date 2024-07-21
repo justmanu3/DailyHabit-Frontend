@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { buttonClick } from "../Animations";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../Config/firebase.config";
+import ConfirmModal from "../Components/ConfirmModal";
 
 const DBProducts = () => {
   const products = useSelector((state) => state.products);
@@ -21,8 +22,9 @@ const DBProducts = () => {
   const [productCount, setProductCount] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [productIdToDelete, setProductIdToDelete] = useState(null);
 
-  // Fetch products once when the component mounts
   useEffect(() => {
     if (!products) {
       getAllProducts().then((data) => {
@@ -31,7 +33,6 @@ const DBProducts = () => {
     }
   }, [dispatch, products]);
 
-  // Fetch categories once when the component mounts
   useEffect(() => {
     const fetchCategories = async () => {
       const querySnapshot = await getDocs(collection(db, "categories"));
@@ -87,8 +88,13 @@ const DBProducts = () => {
   };
 
   const deleteFunction = (productId) => {
-    if (window.confirm("Confirm Deletion?")) {
-      deleteAProduct(productId).then((res) => {
+    setProductIdToDelete(productId);
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (productIdToDelete) {
+      deleteAProduct(productIdToDelete).then((res) => {
         dispatch(alertSuccess("Product Deleted"));
         setTimeout(() => {
           dispatch(alertNULL());
@@ -96,6 +102,8 @@ const DBProducts = () => {
         getAllProducts().then((data) => {
           dispatch(setAllProducts(data));
         });
+        setIsModalOpen(false);
+        setProductIdToDelete(null);
       });
     }
   };
@@ -197,18 +205,16 @@ const DBProducts = () => {
               <td className="py-2 px-4 border-b border-gray-200">
                 {product.product_count}
               </td>
-              <td className="py-2 px-4 border-b border-gray-200">
+              <td className=" py-2 px-4 border-b border-gray-200">
                 <button
                   onClick={() => handleClick(product)}
-                  className="mr-2 text-white bg-emerald-500 border rounded-md "
+                  className="p-1 mr-2 text-white bg-emerald-500 border rounded-md "
                 >
                   Edit
                 </button>
                 <button
-                  onClick={() => {
-                    deleteFunction(product.productId);
-                  }}
-                  className="text-white bg-red-500 border rounded-md"
+                  onClick={() => deleteFunction(product.productId)}
+                  className="p-1 text-white bg-red-500 border rounded-md"
                 >
                   Delete
                 </button>
@@ -217,6 +223,11 @@ const DBProducts = () => {
           ))}
         </tbody>
       </table>
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 };

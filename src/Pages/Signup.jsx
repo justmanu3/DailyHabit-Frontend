@@ -174,33 +174,36 @@ const Signup = () => {
   };
 
   return (
-    <div className="w-screen h-screen relative overflow-hidden flex">
+    <div className="w-screen h-screen relative overflow-hidden flex items-center justify-center bg-gray-100">
       {/* Background image */}
-
       <img
         src={LoginBg}
-        className="w-full h-screen object-cover absolute top-0 left-0"
-        alt=""
+        className="w-full h-full object-cover absolute top-0 left-0 z-0"
+        alt="Background"
       />
 
       {/* Content */}
-      <div className="flex flex-col items-center bg-cardOverlay w-[80%] md:w-508 h-full z-10 backdrop-blur-md p-4 px-4 py-12">
-        <div className="flex items-center justify-items-start gap-4 w-full">
-          <img src={logo} className="w-10" alt="" />
-          <p className=" text-3xl">DAILY HOBBY</p>
+      <div className="flex flex-col items-center bg-cardOverlay w-[90%] max-w-lg md:w-[80%] lg:w-[50%] h-auto z-10 backdrop-blur-md p-4 md:p-8 lg:p-12 rounded-lg">
+        <div className="flex items-center gap-4 mb-6 w-full">
+          <img src={logo} className="w-8 md:w-10" alt="Logo" />
+          <p className="text-2xl md:text-3xl text-white">DAILY HABIT</p>
         </div>
 
-        <br />
-        <p className="text-3xl text-textColor font-semibold">Welcome</p>
-        <p>Sign Up with Details</p>
+        <p className="text-2xl md:text-3xl text-textColor font-semibold mb-4">
+          Welcome
+        </p>
+        <p className="text-base md:text-lg text-gray-700 mb-6">
+          Sign Up with Details
+        </p>
 
-        <div className="w-full flex flex-col items-center justify-center gap-6 px-4 md:px-12 py-4">
+        <div className="w-full flex flex-col items-center justify-center gap-4 md:gap-6">
+          {/* Uncomment and adjust as needed */}
           {/* <LoginInput
             placeHolder={"Username"}
             icon=""
             inputState={name}
             inputStateFunc={setName}
-            type="email"
+            type="text"
           /> */}
           <LoginInput
             placeHolder={"Email Here"}
@@ -215,7 +218,7 @@ const Signup = () => {
               className="w-full px-4 py-2 rounded-md bg-red-400 cursor-pointer text-xl capitalize hover:bg-red-500 duration-150"
               onClick={handleSendOTP}
             >
-              Resend OTP
+              Send OTP
             </motion.button>
           ) : (
             <motion.button
@@ -223,7 +226,7 @@ const Signup = () => {
               className="w-full px-4 py-2 rounded-md bg-red-400 cursor-pointer text-xl capitalize hover:bg-red-500 duration-150"
               onClick={handleSendOTP}
             >
-              Sent OTP
+              Resend OTP
             </motion.button>
           )}
 
@@ -232,7 +235,7 @@ const Signup = () => {
             icon=""
             inputState={inputOtp}
             inputStateFunc={setInputOtp}
-            type=" text"
+            type="text"
           />
 
           <LoginInput
@@ -244,18 +247,18 @@ const Signup = () => {
           />
 
           <LoginInput
-            placeHolder={"Confirm Password "}
+            placeHolder={"Confirm Password"}
             icon=""
             inputState={confirmPassword}
             inputStateFunc={setconfirmPassword}
             type="password"
           />
 
-          <p>
+          <p className="text-gray-700 text-sm md:text-base mt-4">
             Already Have an Account?
             <motion.button
               {...buttonClick}
-              className="text-red-400 underline cursor-pointer bg-transparent"
+              className="text-red-400 underline cursor-pointer bg-transparent ml-2"
               onClick={() => navigate("/login")}
             >
               Sign In here
@@ -264,20 +267,12 @@ const Signup = () => {
 
           <motion.button
             {...buttonClick}
-            className="w-full px-4 py-2 rounded-md bg-red-400 cursor-pointer text-xl capitalize hover:bg-red-500 duration-150"
+            className="w-full px-4 py-2 rounded-md bg-red-400 cursor-pointer text-xl capitalize hover:bg-red-500 duration-150 mt-4"
             onClick={handleVerifyOTPAndSignUp}
           >
             Sign Up
           </motion.button>
         </div>
-
-        <div className="flex items-center justify-between gap-16">
-          <div className="w-24 h-[2px] rounded-md bg-white"></div>
-
-          <p className="text-white"></p>
-          <div className="w-24 h-[2px] rounded-md bg-white"></div>
-        </div>
-        <br />
       </div>
     </div>
   );
