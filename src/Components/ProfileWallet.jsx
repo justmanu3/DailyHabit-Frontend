@@ -20,7 +20,7 @@ const ProfileWallet = () => {
     }
   }, [dispatch, wallet, user]);
 
-  const acivateWallet = async (e) => {
+  const activateWallet = async (e) => {
     e.preventDefault();
     const user_id = user?.user_id;
     const date = new Date();
@@ -39,32 +39,29 @@ const ProfileWallet = () => {
   };
 
   return (
-    <div>
-      <div className="flex flex-col items-start justify-start gap-3 pt-3">
-        {wallet === null ? (
-          <div className="flex pt-10">
-            <motion.button
-              className="flex items-center justify-center w-60 h-10 bg-emerald-600 font-sans font-extrabold text-2xl rounded-lg text-white"
-              {...buttonClick}
-              onClick={acivateWallet}
-            >
-              Activate Wallet
-            </motion.button>
+    <div className="flex flex-col items-start justify-start gap-3 pt-3 px-4 sm:px-6 md:px-12 lg:px-24">
+      {wallet === null ? (
+        <div className="flex pt-10">
+          <motion.button
+            className="flex items-center justify-center w-60 h-10 bg-emerald-600 font-sans font-extrabold text-2xl rounded-lg text-white"
+            {...buttonClick}
+            onClick={activateWallet}
+          >
+            Activate Wallet
+          </motion.button>
+        </div>
+      ) : (
+        <div className="flex pt-10 items-center">
+          <p className="pt-1 text-2xl">Wallet Balance: </p>
+          <div className="flex items-center justify-center w-40 h-10 bg-emerald-600 font-sans font-extrabold text-2xl rounded-lg text-white">
+            <HiCurrencyRupee />
+            <p>{wallet.amount}</p>
           </div>
-        ) : (
-          <div className="flex pt-10">
-            <p className="pt-1 text-2xl">Wallet Balance: {"  "}</p>
-            <div className="flex items-center justify-center w-40 h-10 bg-emerald-600 font-sans font-extrabold text-2xl rounded-lg text-white">
-              <p>
-                <HiCurrencyRupee />
-              </p>
-              <p>{wallet.amount}</p>
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="mt-10">
-        <table className="border-collapse w-50 ">
+        </div>
+      )}
+
+      <div className="mt-10 overflow-x-auto w-full">
+        <table className="border-collapse w-full">
           <thead>
             <tr>
               <th className="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">
@@ -77,46 +74,42 @@ const ProfileWallet = () => {
                 Reason
               </th>
               <th className="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">
-                Amount{" "}
+                Amount
               </th>
             </tr>
           </thead>
           <tbody>
-            {wallet &&
-              wallet?.transactions?.map((doc, index) => {
-                return (
-                  <tr
-                    key={index}
-                    className="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0"
-                  >
-                    <td className="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
-                      <span className="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">
-                        S.No
-                      </span>
-                      {index + 1}
-                    </td>
-
-                    <td className="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
-                      <span className="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">
-                        Coupon Name
-                      </span>
-                      {doc?.transactiontype}
-                    </td>
-                    <td className="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
-                      <span className="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">
-                        Discount Percentage
-                      </span>
-                      {doc?.reason}
-                    </td>
-                    <td className="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
-                      <span className="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">
-                        Minumum Purchase Value
-                      </span>
-                      ₹ {doc?.amount}
-                    </td>
-                  </tr>
-                );
-              })}
+            {wallet?.transactions?.map((doc, index) => (
+              <tr
+                key={index}
+                className="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-wrap lg:flex-row flex-no-wrap mb-10 lg:mb-0"
+              >
+                <td className="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
+                  <span className="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">
+                    S.No
+                  </span>
+                  {index + 1}
+                </td>
+                <td className="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
+                  <span className="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">
+                    Transaction
+                  </span>
+                  {doc?.transactiontype}
+                </td>
+                <td className="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
+                  <span className="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">
+                    Reason
+                  </span>
+                  {doc?.reason}
+                </td>
+                <td className="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
+                  <span className="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">
+                    Amount
+                  </span>
+                  ₹ {doc?.amount}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

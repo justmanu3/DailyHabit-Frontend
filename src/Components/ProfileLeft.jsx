@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/Logo/mainlogo.png";
 import { isActiveStyle, isNotActiveStyle } from "../assets/utils/styles";
+import { useSelector } from "react-redux";
 
 const ProfileLeft = () => {
+  const user = useSelector((state) => state.user);
+
   return (
     <div className="h-full py-10 flex flex-col bg-gray-300 backdrop-blur-md shadow-md min-w-210 w-300 gap-3">
       <NavLink
@@ -35,14 +38,16 @@ const ProfileLeft = () => {
           Address
         </NavLink>
 
-        <NavLink
-          to={"/profile/userpassword"}
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          Change Password
-        </NavLink>
+        {user?.email_verified === false ? (
+          <NavLink
+            to={"/profile/userpassword"}
+            className={({ isActive }) =>
+              isActive ? isActiveStyle : isNotActiveStyle
+            }
+          >
+            Change Password
+          </NavLink>
+        ) : null}
 
         <NavLink
           to={"/profile/userwallet"}
@@ -55,6 +60,6 @@ const ProfileLeft = () => {
       </ul>
     </div>
   );
-}
+};
 
-export default ProfileLeft
+export default ProfileLeft;

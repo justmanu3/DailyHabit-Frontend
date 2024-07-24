@@ -53,6 +53,12 @@ const ProductsFilter = () => {
     });
   };
 
+  const filteredProducts = sortedProducts(products)
+    .filter((data) => data.product_category === category)
+    .filter((data) =>
+      data.product_name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
   return (
     <motion.div className="w-full flex flex-col pt-8">
       <div className="w-full flex flex-col md:flex-row items-start md:items-center justify-between px-5">
@@ -97,21 +103,19 @@ const ProductsFilter = () => {
 
       <div className="flex justify-center px-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 w-full max-w-screen-xl">
-          {products &&
-            sortedProducts(products)
-              .filter((data) => data.product_category === category)
-              .filter((data) =>
-                data.product_name
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase())
-              )
-              .map((data, i) => (
-                <SliderCard
-                  key={data.id || i}
-                  data={{ ...data, imageURL: data.imageURL[0] }}
-                  index={i}
-                />
-              ))}
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((data, i) => (
+              <SliderCard
+                key={data.id || i}
+                data={{ ...data, imageURL: data.imageURL[0] }}
+                index={i}
+              />
+            ))
+          ) : (
+            <p className="text-center text-gray-500 w-full">
+              No related products found
+            </p>
+          )}
         </div>
       </div>
     </motion.div>
@@ -124,7 +128,7 @@ export const FilterCard = ({ data, index, category, setCategory }) => {
       key={data.id || index}
       {...fadeInOut(index)}
       onClick={() => setCategory(data.title)}
-      className={`group  border-red-500 border-2 w-full max-w-xs cursor-pointer rounded-md py-6 px-4 ${
+      className={`group border-red-500 border-2 w-full max-w-xs cursor-pointer rounded-md py-6 px-4 ${
         category === data.title ? "bg-red-500" : "bg-primary"
       } hover:bg-red-500 shadow-md flex flex-col items-center justify-center gap-2`}
     >

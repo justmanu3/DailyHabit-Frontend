@@ -17,8 +17,6 @@ const ProfileUser = () => {
   const [username, setUsername] = useState(user?.name);
   const [isLoading, setIsLoading] = useState(false);
 
-  //////---------------------->
-
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };
@@ -36,13 +34,14 @@ const ProfileUser = () => {
       setIsLoading(false);
     }
   };
+
   return editing ? (
-    <div className="flex items-center justify-center pt-6 px-24 w-full">
-      <div className="grid pt-20 place-items-center">
-        <div className="max-w-lg p-12 bg-white rounded-2xl relative">
+    <div className="flex items-center justify-center pt-6 px-4 sm:px-6 md:px-12 lg:px-24 w-full">
+      <div className="grid pt-12 place-items-center">
+        <div className="max-w-md sm:max-w-lg p-6 sm:p-8 md:p-12 bg-white rounded-2xl relative shadow-lg">
           <div className="absolute top-4 right-4">
             <motion.button
-              className="flex items-center justify-center w-6 h-6 text-white bg-red-500 hover:bg-red-600 rounded-xl"
+              className="flex items-center justify-center w-6 h-6 text-white bg-red-500 hover:bg-red-600 rounded-full"
               onClick={() => {
                 setEditing(false);
               }}
@@ -50,7 +49,7 @@ const ProfileUser = () => {
               X
             </motion.button>
           </div>
-          <h1 className="text-xl pt-7 text-red-500 font-semibold">
+          <h1 className="text-lg sm:text-xl pt-7 text-red-500 font-semibold">
             Hello there,{" "}
             <span className="font-normal text-black">
               Want to Edit Profile?
@@ -104,33 +103,38 @@ const ProfileUser = () => {
       </div>
     </div>
   ) : (
-    <div className="profile-page flex items-center justify-center flex-col pt-6 px-24 w-full">
-      <div className="max-w-lg mx-auto my-10 bg-white rounded-lg shadow-md p-5">
+    <div className="flex items-center justify-center flex-col pt-6 px-4 sm:px-6 md:px-12 lg:px-24 w-full">
+      <div className="max-w-md sm:max-w-lg mx-auto my-10 bg-white rounded-lg shadow-md p-5">
         <img
-          className="w-32 h-32 rounded-full mx-auto"
+          className="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto"
           src={user?.picture ?? Avatar}
           alt="Profile picture"
         />
-        <h2 className="text-center text-2xl font-semibold mt-3">
+        <h2 className="text-lg sm:text-2xl font-semibold mt-3 text-center">
           {user?.email}
         </h2>
-        <p className="text-center text-gray-600 mt-1">{user?.name}123</p>
-        <div className="flex items-center justify-center mt-5 bg-red-400 hover:bg-red-500 w-[40px] rounded-xl">
-          <motion.button
-            {...buttonClick}
-            onClick={() => {
-              setEditing(true);
-            }}
-          >
-            Edit
-          </motion.button>
+        <p className="text-sm sm:text-base text-gray-600 mt-1 text-center">
+          {user?.name}
+        </p>
+        <div className="flex items-center justify-center mt-5">
+          {user?.email_verified == false ? (
+            <motion.button
+              {...buttonClick}
+              className="w-24 py-2 text-white bg-red-400 hover:bg-red-500 rounded-xl"
+              onClick={() => {
+                setEditing(true);
+              }}
+            >
+              Edit
+            </motion.button>
+          ) : null}
         </div>
         <div className="mt-5">
-          <h3 className="text-xl font-semibold">NOTE</h3>
-          <p className="text-gray-600 mt-2">
+          <h3 className="text-lg sm:text-xl font-semibold">NOTE</h3>
+          <p className="text-sm sm:text-base text-gray-600 mt-2">
             Here, you'll find a wealth of resources, tips, and products designed
-            to help you make eco-friendly choices in your daily life.We are here
-            to guide and inspire you every step of the way. Thank you for
+            to help you make eco-friendly choices in your daily life. We are
+            here to guide and inspire you every step of the way. Thank you for
             choosing to be part of this important journey. Let's make every
             action count and work towards a sustainable future, one step at a
             time. Welcome to DAILY HABIT, where every choice matters!

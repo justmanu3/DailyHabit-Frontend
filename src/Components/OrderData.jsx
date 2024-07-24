@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { alertInfo, alertNULL } from "../Context/actions/alertActions";
 import { setWallet } from "../Context/actions/walletActions";
 import Invoice from "./Invoice";
+import ConfirmModal from "../Components/ConfirmModal"; 
 
 const OrderData = ({ index, data, admin }) => {
   const dispatch = useDispatch();
@@ -22,6 +23,8 @@ const OrderData = ({ index, data, admin }) => {
   const walletId = wallet?.walletId;
   const [complaint, setComplaint] = useState(false);
   const [showInvoice, setShowInvoice] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [selectedOrder, setSelectedOrder] = useState(null); // State to track selected order for cancellation
 
   useEffect(() => {
     if (!wallet) {
@@ -43,6 +46,15 @@ const OrderData = ({ index, data, admin }) => {
         }
       })
       .then((walletResponse) => {
+        if (status === "paid") {
+          return getWallet(userId).then((walletData) => {
+            dispatch(setWallet(walletData));
+          });
+        } else {
+          return Promise.resolve();
+        }
+      })
+      .then(() => {
         return getAllOrders();
       })
       .then((data) => {
@@ -69,6 +81,19 @@ const OrderData = ({ index, data, admin }) => {
     }, 3000);
   };
 
+  const handleConfirmCancel = () => {
+    if (selectedOrder) {
+      handleClick(
+        selectedOrder.orderId,
+        "cancelled",
+        selectedOrder.status,
+        selectedOrder.total,
+        walletId
+      );
+      setIsModalOpen(false);
+    }
+  };
+
   return (
     <>
       {complaint && (
@@ -76,16 +101,14 @@ const OrderData = ({ index, data, admin }) => {
           <div className="max-w-lg w-full p-6 bg-white rounded-2xl">
             <div className="flex items-center justify-end w-full">
               <button
-                className="flex items-center bg-red-600 rounded-full w-6 justify-center text-md font-bold text-white"
-                onClick={() => {
-                  setComplaint(false);
-                }}
+                className="flex items-center bg-red-600 rounded-full w-6 h-6 justify-center text-md font-bold text-white"
+                onClick={() => setComplaint(false)}
               >
                 x
               </button>
             </div>
             <h1 className="text-xl text-red-500 font-semibold">
-              Hello ,{" "}
+              Hello,{" "}
               <span className="font-normal text-black">
                 Want to Raise a Complaint?
               </span>
@@ -131,7 +154,7 @@ const OrderData = ({ index, data, admin }) => {
                 htmlFor="comments"
                 className="block mt-2 text-xs font-semibold text-gray-600 uppercase"
               >
-                Comments(optional)
+                Comments (optional)
               </label>
               <input
                 id="comments"
@@ -158,12 +181,18 @@ const OrderData = ({ index, data, admin }) => {
         <Invoice data={data} onClose={() => setShowInvoice(false)} />
       )}
 
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirmCancel}
+      />
+
       <motion.div
         key={index}
         {...fadeInOut(index)}
-        className="w-full flex flex-col items-start justify-start px-3 py-2 border relative border-gray-300 bg-gray-200 drop-shadow-md rounded-md gap-4"
+        className="w-full flex flex-col items-start justify-start px-3 py-4 border relative border-gray-300 bg-gray-200 drop-shadow-md rounded-md gap-4"
       >
-        <div className="w-full flex items-center justify-between">
+        <div className="w-full flex items-center justify-between flex-wrap">
           <h3 className="text-md text-textColor font-semibold">
             ID {data.orderId}
           </h3>
@@ -172,19 +201,14 @@ const OrderData = ({ index, data, admin }) => {
             (data.sts === "delivered" || data.sts === "cancelled" ? (
               <></>
             ) : (
-              <div className="flex items-center justify-center gap-2">
+              <div className="flex items-center justify-center gap-2 mt-2">
                 <motion.p
                   {...buttonClick}
-                  className="text-red-600 text-base font-semibold capitalize border border-red-500 px-2 py-[2px] rounded-md cursor-pointer"
-                  onClick={() =>
-                    handleClick(
-                      data.orderId,
-                      "cancelled",
-                      data.status,
-                      data.total,
-                      walletId
-                    )
-                  }
+                  className="text-red-600 text-base font-semibold capitalize border border-red-500 px-2 py-1 rounded-md cursor-pointer"
+                  onClick={() => {
+                    setSelectedOrder(data);
+                    setIsModalOpen(true);
+                  }}
                 >
                   Cancel Order
                 </motion.p>
@@ -195,19 +219,17 @@ const OrderData = ({ index, data, admin }) => {
             (data.sts === "preparing" || data.sts === "cancelled" ? (
               <></>
             ) : (
-              <div className="flex items-center justify-center gap-2">
+              <div className="flex items-center justify-center gap-2 mt-2">
                 <motion.p
                   {...buttonClick}
-                  className="text-orange-600 text-base font-semibold capitalize border border-orange-500 px-2 py-[2px] rounded-md cursor-pointer"
-                  onClick={() => {
-                    setComplaint(true);
-                  }}
+                  className="text-orange-600 text-base font-semibold capitalize border border-orange-500 px-2 py-1 rounded-md cursor-pointer"
+                  onClick={() => setComplaint(true)}
                 >
                   Raise A Complaint
                 </motion.p>
                 <motion.p
                   {...buttonClick}
-                  className="text-black text-base font-semibold capitalize border border-gray-600 px-2 py-[2px] rounded-md cursor-pointer"
+                  className="text-black text-base font-semibold capitalize border border-gray-600 px-2 py-1 rounded-md cursor-pointer"
                   onClick={() => setShowInvoice(true)}
                 >
                   Invoice
@@ -215,18 +237,18 @@ const OrderData = ({ index, data, admin }) => {
               </div>
             ))}
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-wrap">
             <p className="flex items-center gap-1 text-textColor">
               Total:
               <HiCurrencyRupee className="text-lg text-red-400" />{" "}
               <span className="text-textColor font-bold">{data?.total}</span>
             </p>
 
-            <p className="px-2 py-[2px] text-sm text-textColor font-semibold capitalize rounded-md bg-emerald-400 drop-shadow-md">
+            <p className="px-2 py-1 text-sm text-textColor font-semibold capitalize rounded-md bg-emerald-400 drop-shadow-md">
               {data?.status}
             </p>
             <p
-              className={`text-base font-semibold capitalize border border-gray-300 px-2 py-[2px] rounded-md ${
+              className={`text-base font-semibold capitalize border border-gray-300 px-2 py-1 rounded-md ${
                 (data.sts === "preparing" && "text-orange-400 bg-orange-100") ||
                 (data.sts === "cancelled" && "text-red-500 bg-red-100") ||
                 (data.sts === "delivered" && "text-emerald-400 bg-emerald-100")
@@ -235,25 +257,25 @@ const OrderData = ({ index, data, admin }) => {
               {data.sts}
             </p>
             {admin && (
-              <div className="flex items-center justify-center gap-2">
+              <div className="flex items-center justify-center gap-2 flex-wrap">
                 <p className="text-lg font-semibold text-textColor">Mark as</p>
                 <motion.p
                   {...buttonClick}
-                  className="text-orange-500 text-base font-semibold capitalize border border-gray-300 px-2 py-[2px] rounded-md cursor-pointer"
+                  className="text-orange-500 text-base font-semibold capitalize border border-gray-300 px-2 py-1 rounded-md cursor-pointer"
                   onClick={() => handleClick(data.orderId, "preparing")}
                 >
                   Preparing
                 </motion.p>
                 <motion.p
                   {...buttonClick}
-                  className="text-red-500 text-base font-semibold capitalize border border-gray-300 px-2 py-[2px] rounded-md cursor-pointer"
+                  className="text-red-500 text-base font-semibold capitalize border border-gray-300 px-2 py-1 rounded-md cursor-pointer"
                   onClick={() => handleClick(data.orderId, "cancelled")}
                 >
                   Cancelled
                 </motion.p>
                 <motion.p
                   {...buttonClick}
-                  className="text-emerald-500 text-base font-semibold capitalize border border-gray-300 px-2 py-[2px] rounded-md cursor-pointer"
+                  className="text-emerald-500 text-base font-semibold capitalize border border-gray-300 px-2 py-1 rounded-md cursor-pointer"
                   onClick={() => handleClick(data.orderId, "delivered")}
                 >
                   Delivered
@@ -270,12 +292,12 @@ const OrderData = ({ index, data, admin }) => {
                 <motion.div
                   {...fadeInOut(j)}
                   key={j}
-                  className="flex items-start justify-center gap-1"
+                  className="flex items-start justify-start gap-2"
                 >
                   {item.imageURL ? (
                     <img
                       src={item.imageURL}
-                      className="w-10 h-10 object-contain"
+                      className="w-16 h-16 object-contain"
                       alt=""
                     />
                   ) : null}
@@ -286,7 +308,6 @@ const OrderData = ({ index, data, admin }) => {
                     </p>
                     <div className="flex items-start gap-2">
                       <p className="text-sm text-textColor">
-                        {" "}
                         Qty: {item.quantity}
                       </p>
                       <p className="flex items-center gap-1 text-textColor">
@@ -299,7 +320,7 @@ const OrderData = ({ index, data, admin }) => {
               ))}
           </div>
 
-          <div className="flex items-start justify-start flex-col gap-2 px-6 ml-auto w-full md:w-460">
+          <div className="flex items-start justify-start flex-col gap-2 px-4 ml-auto w-full md:w-460">
             <h1 className="text-lg text-textColor font-semibold">
               {data.shipping_details.name}
             </h1>
