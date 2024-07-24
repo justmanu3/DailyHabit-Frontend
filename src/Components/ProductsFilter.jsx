@@ -42,7 +42,7 @@ const ProductsFilter = () => {
   };
 
   const sortedProducts = (products) => {
-    return products.sort((a, b) => {
+    return products?.sort((a, b) => {
       if (sortOrder === "low-to-high") {
         return a.product_price - b.product_price;
       } else if (sortOrder === "high-to-low") {
@@ -54,8 +54,8 @@ const ProductsFilter = () => {
   };
 
   const filteredProducts = sortedProducts(products)
-    .filter((data) => data.product_category === category)
-    .filter((data) =>
+    ?.filter((data) => data.product_category === category)
+    ?.filter((data) =>
       data.product_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -103,8 +103,8 @@ const ProductsFilter = () => {
 
       <div className="flex justify-center px-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 w-full max-w-screen-xl">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((data, i) => (
+          {filteredProducts?.length > 0 ? (
+            filteredProducts?.map((data, i) => (
               <SliderCard
                 key={data.id || i}
                 data={{ ...data, imageURL: data.imageURL[0] }}
